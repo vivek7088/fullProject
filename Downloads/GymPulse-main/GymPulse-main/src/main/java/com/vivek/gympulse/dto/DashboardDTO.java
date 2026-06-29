@@ -6,15 +6,18 @@ public class DashboardDTO {
     private long activeMembers;
     private long expiredMembers;
     private long pendingMembers;
+
     private Double totalIncome;
     private Double totalPendingAmount;
+    private Double todayCollection;
 
     public DashboardDTO(long totalMembers,
                         long activeMembers,
                         long expiredMembers,
                         long pendingMembers,
                         Double totalIncome,
-                        Double totalPendingAmount) {
+                        Double totalPendingAmount,
+                        Double todayCollection) {
 
         this.totalMembers = totalMembers;
         this.activeMembers = activeMembers;
@@ -22,6 +25,7 @@ public class DashboardDTO {
         this.pendingMembers = pendingMembers;
         this.totalIncome = totalIncome;
         this.totalPendingAmount = totalPendingAmount;
+        this.todayCollection = todayCollection;
     }
 
     public long getTotalMembers() {
@@ -46,5 +50,9 @@ public class DashboardDTO {
 
     public Double getTotalPendingAmount() {
         return totalPendingAmount;
+    }
+
+    public Double getTodayCollection() {
+        return todayCollection;
     }
 }

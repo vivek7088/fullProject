@@ -77,6 +77,7 @@ public class MemberService {
         Double totalIncome = paymentRepository.getTotalIncomeByGymOwner(owner);
 
         Double totalPendingAmount = memberRepository.getTotalPendingAmountByGymOwner(owner);
+        Double todayCollection = paymentRepository.getTodayCollection(owner);
 
         return new DashboardDTO(
                 totalMembers,
@@ -84,7 +85,8 @@ public class MemberService {
                 expiredMembers,
                 pendingMembers,
                 totalIncome,
-                totalPendingAmount
+                totalPendingAmount,
+                todayCollection
         );
     }
 

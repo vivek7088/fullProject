@@ -21,4 +21,12 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
             AND p.status='PAID'
             """)
     Double getTotalIncomeByGymOwner(GymOwner gymOwner);
+    @Query("""
+SELECT COALESCE(SUM(p.amount),0)
+FROM Payment p
+WHERE p.member.gymOwner = :gymOwner
+AND p.paymentDate = CURRENT_DATE
+AND p.status = 'PAID'
+""")
+    Double getTodayCollection(GymOwner gymOwner);
 }
