@@ -1,5 +1,6 @@
 package com.vivek.gympulse.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -19,7 +20,9 @@ public class GymOwner {
 
     private String email;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+
     private String plan;
 
     private LocalDate subscriptionExpiry;
@@ -74,6 +77,7 @@ public class GymOwner {
     public void setPassword(String password) {
         this.password = password;
     }
+
     public String getPlan() {
         return plan;
     }

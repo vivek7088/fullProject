@@ -42,4 +42,14 @@ WHERE m.gymOwner = :gymOwner
 AND m.expiryDate < CURRENT_DATE
 """)
     Double getTotalPendingAmountByGymOwner(GymOwner gymOwner);
+    @Query("""
+SELECT m
+FROM Member m
+WHERE m.gymOwner = :gymOwner
+AND (
+LOWER(m.name) LIKE LOWER(CONCAT('%', :keyword, '%'))
+OR m.phone LIKE CONCAT('%', :keyword, '%')
+)
+""")
+    List<Member> searchMember(GymOwner gymOwner, String keyword);
 }

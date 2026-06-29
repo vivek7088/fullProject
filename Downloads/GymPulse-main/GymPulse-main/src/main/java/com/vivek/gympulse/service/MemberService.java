@@ -122,6 +122,14 @@ public class MemberService {
 
         return memberRepository.save(member);
     }
+    // Search Member Owner Wise
+    public List<Member> searchMember(Long ownerId, String keyword) {
+
+        GymOwner owner = gymOwnerRepository.findById(ownerId)
+                .orElseThrow(() -> new RuntimeException("Gym Owner Not Found"));
+
+        return memberRepository.searchMember(owner, keyword);
+    }
 
     public void deleteMember(Long id) {
         memberRepository.deleteById(id);

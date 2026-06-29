@@ -45,6 +45,14 @@ public class MemberController {
                                @RequestBody Member member) {
         return memberService.updateMember(id, member);
     }
+    // Search Member
+    @GetMapping("/search/{ownerId}")
+    public List<Member> searchMember(
+            @PathVariable Long ownerId,
+            @RequestParam String keyword) {
+
+        return memberService.searchMember(ownerId, keyword);
+    }
 
     // Delete Member
     @DeleteMapping("/delete/{id}")
