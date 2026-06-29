@@ -26,9 +26,12 @@ public class PaymentService {
 
         // Payment me original member set karo
         payment.setMember(member);
-
+        if (payment.getAmount() > member.getPendingAmount()) {
+            throw new RuntimeException("Payment exceeds pending amount");
+        }
         // Payment save
         Payment savedPayment = paymentRepository.save(payment);
+        // Overpayment Validation
 
         // Paid amount update
         double paid = member.getPaidAmount() + payment.getAmount();
@@ -38,11 +41,15 @@ public class PaymentService {
         double pending = member.getFeesAmount() - paid;
         member.setPendingAmount(pending);
 
-        // Status update
-        if (pending <= 0) {
-            member.setStatus("PAID");
+        // Membership status sirf expiry ke hisab se hoga
+        if (member.getExpiryDate() != null &&
+                member.getExpiryDate().isBefore(java.time.LocalDate.now())) {
+
+            member.setStatus("EXPIRED");
+
         } else {
-            member.setStatus("PENDING");
+
+            member.setStatus("ACTIVE");
         }
 
         // Member save
