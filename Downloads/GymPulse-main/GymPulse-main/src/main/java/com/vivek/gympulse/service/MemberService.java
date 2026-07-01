@@ -32,6 +32,18 @@ public class MemberService {
 
         member.setGymOwner(owner);
 
+        // Pending Amount
+        double pending = member.getFeesAmount() - member.getPaidAmount();
+        member.setPendingAmount(pending);
+
+        // Status
+        member.setStatus("ACTIVE");
+
+        // Expiry Date
+        member.setExpiryDate(
+                member.getJoiningDate().plusMonths(member.getPlanMonths())
+        );
+
         return memberRepository.save(member);
     }
 

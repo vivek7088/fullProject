@@ -4,7 +4,9 @@ import com.vivek.gympulse.dto.DashboardDTO;
 import com.vivek.gympulse.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
+@CrossOrigin(origins = "http://localhost:5174")
 @RestController
 @RequestMapping("/dashboard")
 public class DashboardController {

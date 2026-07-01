@@ -4,7 +4,7 @@ import com.vivek.gympulse.entity.Payment;
 import com.vivek.gympulse.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/payment")
 public class PaymentController {
