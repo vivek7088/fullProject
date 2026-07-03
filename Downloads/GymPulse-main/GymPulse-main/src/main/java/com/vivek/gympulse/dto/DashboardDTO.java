@@ -10,14 +10,19 @@ public class DashboardDTO {
     private Double totalIncome;
     private Double totalPendingAmount;
     private Double todayCollection;
+    private Double currentMonthCollection;
+    private long currentMonthTransactions;
 
-    public DashboardDTO(long totalMembers,
-                        long activeMembers,
-                        long expiredMembers,
-                        long pendingMembers,
-                        Double totalIncome,
-                        Double totalPendingAmount,
-                        Double todayCollection) {
+    public DashboardDTO(
+            long totalMembers,
+            long activeMembers,
+            long expiredMembers,
+            long pendingMembers,
+            Double totalIncome,
+            Double totalPendingAmount,
+            Double todayCollection,
+            Double currentMonthCollection,
+            long currentMonthTransactions) {
 
         this.totalMembers = totalMembers;
         this.activeMembers = activeMembers;
@@ -26,6 +31,8 @@ public class DashboardDTO {
         this.totalIncome = totalIncome;
         this.totalPendingAmount = totalPendingAmount;
         this.todayCollection = todayCollection;
+        this.currentMonthCollection = currentMonthCollection;
+        this.currentMonthTransactions = currentMonthTransactions;
     }
 
     public long getTotalMembers() {
@@ -54,5 +61,12 @@ public class DashboardDTO {
 
     public Double getTodayCollection() {
         return todayCollection;
+    }
+    public Double getCurrentMonthCollection() {
+        return currentMonthCollection;
+    }
+
+    public long getCurrentMonthTransactions() {
+        return currentMonthTransactions;
     }
 }

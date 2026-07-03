@@ -53,6 +53,17 @@ public class MemberController {
 
         return memberService.searchMember(ownerId, keyword);
     }
+    // Due Members Owner Wise
+    @GetMapping("/due/{ownerId}")
+    public List<Member> getDueMembers(@PathVariable Long ownerId) {
+        return memberService.getDueMembers(ownerId);
+    }
+    @GetMapping("/pending-payments/{ownerId}")
+    public List<Member> getPendingPayments(
+            @PathVariable Long ownerId) {
+
+        return memberService.getPendingPayments(ownerId);
+    }
 
     // Delete Member
     @DeleteMapping("/delete/{id}")

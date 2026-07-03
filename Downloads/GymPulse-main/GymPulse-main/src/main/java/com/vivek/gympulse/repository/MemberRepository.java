@@ -31,15 +31,16 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 SELECT COUNT(m)
 FROM Member m
 WHERE m.gymOwner = :gymOwner
-AND m.expiryDate < CURRENT_DATE
+AND m.pendingAmount > 0
+AND m.nextDueDate <= CURRENT_DATE
 """)
     long countPendingMembersByGymOwner(GymOwner gymOwner);
 
     @Query("""
-SELECT COALESCE(SUM(m.feesAmount),0)
+SELECT COALESCE(SUM(m.pendingAmount),0)
 FROM Member m
 WHERE m.gymOwner = :gymOwner
-AND m.expiryDate < CURRENT_DATE
+AND m.pendingAmount > 0
 """)
     Double getTotalPendingAmountByGymOwner(GymOwner gymOwner);
     @Query("""
@@ -51,5 +52,28 @@ LOWER(m.name) LIKE LOWER(CONCAT('%', :keyword, '%'))
 OR m.phone LIKE CONCAT('%', :keyword, '%')
 )
 """)
+
     List<Member> searchMember(GymOwner gymOwner, String keyword);
+
+    @Query("""
+SELECT m
+FROM Member m
+WHERE m.gymOwner = :gymOwner
+AND m.pendingAmount > 0
+AND m.nextDueDate <= CURRENT_DATE
+ORDER BY m.nextDueDate ASC
+""")
+    List<Member> findDueMembers(GymOwner gymOwner);
+
+    @Query("""
+SELECT m
+FROM Member m
+WHERE m.gymOwner = :gymOwner
+AND m.pendingAmount > 0
+ORDER BY m.pendingAmount DESC
+""")
+    List<Member> findPendingPayments(GymOwner gymOwner);
+
+
 }
+

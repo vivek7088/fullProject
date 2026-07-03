@@ -16,6 +16,9 @@ import java.util.List;
 public class MemberService {
 
     @Autowired
+    private DueGenerationService dueGenerationService;
+
+    @Autowired
     private MemberRepository memberRepository;
 
     @Autowired
@@ -43,6 +46,7 @@ public class MemberService {
         member.setExpiryDate(
                 member.getJoiningDate().plusMonths(member.getPlanMonths())
         );
+        member.setNextDueDate(member.getExpiryDate());
 
         return memberRepository.save(member);
     }
@@ -52,31 +56,31 @@ public class MemberService {
 
         GymOwner owner = gymOwnerRepository.findById(ownerId)
                 .orElseThrow(() -> new RuntimeException("Gym Owner Not Found"));
-
+        dueGenerationService.generateDuePayments();
         List<Member> members = memberRepository.findByGymOwner(owner);
-
         for (Member member : members) {
 
-            if (member.getExpiryDate() != null &&
-                    member.getExpiryDate().isBefore(LocalDate.now())) {
+            // Due date aa gayi aur current pending 0 hai
+            if (member.getNextDueDate() != null
+                    && !member.getNextDueDate().isAfter(LocalDate.now())
+                    && member.getPendingAmount() == 0) {
 
-                member.setStatus("EXPIRED");
+                member.setPendingAmount(member.getFeesAmount());
+                member.setPaidAmount(0.0);
 
-            } else {
-
-                member.setStatus("ACTIVE");
+                memberRepository.save(member);
             }
 
-            memberRepository.save(member);
         }
-
         return members;
     }
 
     public DashboardDTO getDashboardData(Long ownerId) {
 
+
         GymOwner owner = gymOwnerRepository.findById(ownerId)
                 .orElseThrow(() -> new RuntimeException("Gym Owner Not Found"));
+        dueGenerationService.generateDuePayments();
 
         long totalMembers = memberRepository.countByGymOwner(owner);
 
@@ -89,7 +93,16 @@ public class MemberService {
         Double totalIncome = paymentRepository.getTotalIncomeByGymOwner(owner);
 
         Double totalPendingAmount = memberRepository.getTotalPendingAmountByGymOwner(owner);
+
         Double todayCollection = paymentRepository.getTodayCollection(owner);
+        Double currentMonthCollection =
+                paymentRepository.getCurrentMonthCollection(owner);
+
+        long currentMonthTransactions =
+                paymentRepository.getCurrentMonthTransactions(owner);
+
+
+
 
         return new DashboardDTO(
                 totalMembers,
@@ -98,7 +111,9 @@ public class MemberService {
                 pendingMembers,
                 totalIncome,
                 totalPendingAmount,
-                todayCollection
+                todayCollection,
+                currentMonthCollection,
+                currentMonthTransactions
         );
     }
 
@@ -143,6 +158,21 @@ public class MemberService {
                 .orElseThrow(() -> new RuntimeException("Gym Owner Not Found"));
 
         return memberRepository.searchMember(owner, keyword);
+    }
+    public List<Member> getDueMembers(Long ownerId) {
+
+        GymOwner owner = gymOwnerRepository.findById(ownerId)
+                .orElseThrow(() -> new RuntimeException("Gym Owner Not Found"));
+        dueGenerationService.generateDuePayments();
+
+        return memberRepository.findDueMembers(owner);
+    }
+    public List<Member> getPendingPayments(Long ownerId) {
+
+        GymOwner owner = gymOwnerRepository.findById(ownerId)
+                .orElseThrow(() -> new RuntimeException("Gym Owner Not Found"));
+
+        return memberRepository.findPendingPayments(owner);
     }
 
     public void deleteMember(Long id) {

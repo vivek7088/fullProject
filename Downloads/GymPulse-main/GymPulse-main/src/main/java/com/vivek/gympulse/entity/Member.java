@@ -24,6 +24,7 @@ public class Member {
     private LocalDate joiningDate;
 
     private LocalDate expiryDate;
+    private LocalDate nextDueDate;
 
     private String status;
 
@@ -92,6 +93,13 @@ public class Member {
 
     public LocalDate getExpiryDate() {
         return expiryDate;
+    }
+    public LocalDate getNextDueDate() {
+        return nextDueDate;
+    }
+
+    public void setNextDueDate(LocalDate nextDueDate) {
+        this.nextDueDate = nextDueDate;
     }
 
     public void setExpiryDate(LocalDate expiryDate) {

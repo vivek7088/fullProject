@@ -21,6 +21,8 @@ public class Payment {
 
     private String status;
 
+    private String paymentType;
+
     public Payment() {
     }
 
@@ -59,4 +61,12 @@ public class Payment {
     public void setStatus(String status) {
         this.status = status;
     }
+    public String getPaymentType() {
+        return paymentType;
+    }
+
+    public void setPaymentType(String paymentType) {
+        this.paymentType = paymentType;
+    }
+
 }

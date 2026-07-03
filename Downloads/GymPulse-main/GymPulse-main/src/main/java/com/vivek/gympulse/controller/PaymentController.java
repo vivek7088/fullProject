@@ -22,4 +22,19 @@ public class PaymentController {
 
         return paymentService.getPaymentsByMember(memberId);
     }
+    @GetMapping("/owner/{ownerId}")
+    public java.util.List<Payment> getPaymentsByGymOwner(
+            @PathVariable Long ownerId) {
+
+        return paymentService.getPaymentsByGymOwner(ownerId);
+    }
+    @GetMapping("/recent/{ownerId}")
+    public java.util.List<Payment> getRecentPayments(
+            @PathVariable Long ownerId) {
+
+        return paymentService.getRecentPayments(ownerId);
+    }
 }
+
+
+
