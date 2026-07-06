@@ -4,7 +4,7 @@ import com.vivek.gympulse.entity.GymOwner;
 import com.vivek.gympulse.service.GymOwnerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+import com.vivek.gympulse.dto.LoginResponse;
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/owner")
@@ -19,7 +19,7 @@ public class GymOwnerController {
     }
 
     @PostMapping("/login")
-    public GymOwner login(@RequestBody GymOwner gymOwner) {
+    public LoginResponse login(@RequestBody GymOwner gymOwner) {
         return gymOwnerService.login(
                 gymOwner.getEmail(),
                 gymOwner.getPassword()

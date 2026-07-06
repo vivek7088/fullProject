@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-
+import com.vivek.gympulse.entity.Payment;
 @Service
 public class MemberService {
 
@@ -48,7 +48,22 @@ public class MemberService {
         );
         member.setNextDueDate(member.getExpiryDate());
 
-        return memberRepository.save(member);
+        Member savedMember = memberRepository.save(member);
+
+        if (savedMember.getPaidAmount() > 0) {
+
+            Payment payment = new Payment();
+
+            payment.setMember(savedMember);
+            payment.setAmount(savedMember.getPaidAmount());
+            payment.setPaymentDate(savedMember.getJoiningDate());
+            payment.setStatus("PAID");
+            payment.setPaymentType("Joining Fee");
+
+            paymentRepository.save(payment);
+        }
+
+        return savedMember;
     }
 
     // Get All Members Owner Wise
@@ -173,6 +188,12 @@ public class MemberService {
                 .orElseThrow(() -> new RuntimeException("Gym Owner Not Found"));
 
         return memberRepository.findPendingPayments(owner);
+    }
+    public Member getMemberById(Long id) {
+
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Member Not Found"));
+
     }
 
     public void deleteMember(Long id) {

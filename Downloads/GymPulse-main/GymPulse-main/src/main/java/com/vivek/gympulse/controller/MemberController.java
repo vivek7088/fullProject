@@ -64,6 +64,12 @@ public class MemberController {
 
         return memberService.getPendingPayments(ownerId);
     }
+    @GetMapping("/{id}")
+    public Member getMemberById(@PathVariable Long id) {
+
+        return memberService.getMemberById(id);
+
+    }
 
     // Delete Member
     @DeleteMapping("/delete/{id}")

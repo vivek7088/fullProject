@@ -7,6 +7,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import com.vivek.gympulse.security.JwtService;
+import com.vivek.gympulse.dto.LoginResponse;
 
 @Service
 public class GymOwnerService {
@@ -16,6 +18,9 @@ public class GymOwnerService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtService jwtService;
 
     public GymOwner register(GymOwner gymOwner) {
 
@@ -29,7 +34,7 @@ public class GymOwnerService {
         return gymOwnerRepository.save(gymOwner);
     }
 
-    public GymOwner login(String email, String password) {
+    public LoginResponse login(String email, String password) {
 
         GymOwner owner = gymOwnerRepository
                 .findByEmail(email)
@@ -40,13 +45,15 @@ public class GymOwnerService {
         }
 
         if (!owner.getActive()) {
-            throw new RuntimeException("Your subscription is inactive. Please contact GymPulse.");
+            throw new RuntimeException("Your subscription is inactive.");
         }
 
         if (owner.getSubscriptionExpiry().isBefore(LocalDate.now())) {
             throw new RuntimeException("Your subscription has expired.");
         }
 
-        return owner;
+        String token = jwtService.generateToken(owner.getEmail());
+
+        return new LoginResponse(token, owner);
     }
 }
