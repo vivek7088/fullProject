@@ -31,6 +31,8 @@ public class GymOwner {
 
     private String role;
 
+    private String profilePhoto;
+
     public GymOwner() {
     }
 
@@ -77,6 +79,13 @@ public class GymOwner {
     public void setPassword(String password) {
         this.password = password;
     }
+    public String getProfilePhoto() {
+        return profilePhoto;
+    }
+
+    public void setProfilePhoto(String profilePhoto) {
+        this.profilePhoto = profilePhoto;
+    }
 
     public String getPlan() {
         return plan;
@@ -109,4 +118,6 @@ public class GymOwner {
     public void setRole(String role) {
         this.role = role;
     }
+
+
 }

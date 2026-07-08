@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import com.vivek.gympulse.security.JwtService;
 import com.vivek.gympulse.dto.LoginResponse;
-
+import com.vivek.gympulse.dto.ChangePasswordRequest;
 @Service
 public class GymOwnerService {
 
@@ -55,5 +55,38 @@ public class GymOwnerService {
         String token = jwtService.generateToken(owner.getEmail());
 
         return new LoginResponse(token, owner);
+    }
+    public void changePassword(Long ownerId, ChangePasswordRequest request) {
+
+        GymOwner owner = gymOwnerRepository.findById(ownerId)
+                .orElseThrow(() -> new RuntimeException("Gym Owner Not Found"));
+
+        if (!passwordEncoder.matches(request.getCurrentPassword(), owner.getPassword())) {
+            throw new RuntimeException("Current Password is Incorrect");
+        }
+
+        if (!request.getNewPassword().equals(request.getConfirmPassword())) {
+            throw new RuntimeException("New Password and Confirm Password do not match");
+        }
+
+        owner.setPassword(passwordEncoder.encode(request.getNewPassword()));
+
+        gymOwnerRepository.save(owner);
+    }
+    public GymOwner updateProfile(Long id, GymOwner updatedOwner) {
+
+        GymOwner owner = gymOwnerRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Gym Owner Not Found"));
+
+        owner.setGymName(updatedOwner.getGymName());
+        owner.setOwnerName(updatedOwner.getOwnerName());
+        owner.setPhone(updatedOwner.getPhone());
+        owner.setProfilePhoto(updatedOwner.getProfilePhoto());
+
+
+
+        return gymOwnerRepository.save(owner);
+
+
     }
 }
