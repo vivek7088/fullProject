@@ -65,7 +65,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(List.of(
-                "http://localhost:5173"
+                "https://gympulse-chi.vercel.app"
         ));
 
         configuration.setAllowedMethods(List.of(
