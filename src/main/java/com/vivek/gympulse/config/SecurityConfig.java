@@ -38,7 +38,9 @@ public class SecurityConfig {
                         // Public APIs
                         .requestMatchers(
                                 "/owner/login",
-                                "/owner/register"
+                                "/owner/register",
+                                "/hello",
+                                "/h2-console/**"
                         ).permitAll()
 
                         // Baaki sab APIs JWT ke bina nahi chalengi
@@ -65,7 +67,9 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(List.of(
-                "https://gympulse-chi.vercel.app"
+                "https://gympulse-chi.vercel.app",
+                "http://localhost:5173",
+                "http://127.0.0.1:5173"
         ));
 
         configuration.setAllowedMethods(List.of(
