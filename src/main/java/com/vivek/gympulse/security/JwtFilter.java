@@ -53,11 +53,9 @@ public class JwtFilter extends OncePerRequestFilter {
                         .setAuthentication(authentication);
 
             } catch (Exception e) {
-
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write("Invalid Token");
-                return;
-
+                // Bad/expired token must not block public routes like /owner/login.
+                // Protected routes still fail auth when SecurityContext stays empty.
+                SecurityContextHolder.clearContext();
             }
 
         }
